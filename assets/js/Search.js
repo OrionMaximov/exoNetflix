@@ -47,6 +47,6 @@ searchBtn.addEventListener("click",()=>{
     console.log("blablabla");
     if (id_movie !== ""){
         
-        location.href=searchBtn.dataset.xhrurl+"?id_movie"+id_movie;
+        location.href=searchBtn.dataset.xhrurl+"?id_movie="+id_movie;
     }
 })

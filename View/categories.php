@@ -65,7 +65,7 @@ $currentPage = 20; // [11][12][13][14][15][16][17][18][19][20]
 ////////////////////////////////////
 $genres = FilmController::showGenre($currentPage, $_GET['genre']);
 $films = json_encode($genres);
-
+$url= $routeController->getRoute("singleFilm");
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -79,6 +79,8 @@ $films = json_encode($genres);
     <link rel="stylesheet" href="https://bootswatch.com/5/morph/bootstrap.min.css">
     <script>
         const films = <?= $films ?>;
+        const dBtn = true;
+        const url = '<?= $url?>';
     </script>
     <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>

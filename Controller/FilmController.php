@@ -109,4 +109,38 @@ class FilmController
         $filmRepository=new FilmRepository;
         return $filmRepository->selectAutoComplete($search);
     }
+    public static function getSingleFilm($id){
+        $filmRepository=new FilmRepository;
+        $result = $filmRepository->selectSingle($id);
+        $routeController = new RouteController($_SERVER);
+        $urlPosters= $routeController->getAssets()."img/posters/";
+        $ext=".jpg";
+         
+        $films = new Film(
+            intval($result['id_movie']),
+            $result['title'],
+            intval($result['year']),
+            $result['genres'],
+            $result['plot'],
+            $result['directors'],
+            $result['cast']
+           );
+        if (file_exists($urlPosters.intval($result['id_movie']).$ext)) {
+            $films->urlFilm= $urlPosters.$result['id_movie'].$ext;
+            } else {
+            $films->urlFilm= $urlPosters."default.jpg";
+                    
+        }
+        $reactFilm = [
+            'urlFilm'=>$films->urlFilm,
+                'title'=>$films->getTitle(),
+                'plot'=>$films->getPlot(),
+                'cast'=>$films->getCast(),
+                'genre' =>$films->getGenres(),
+                'annee' =>$films->getYear(), 
+                'directors' =>$films->getDirectors(),
+                    ];
+        $reactFilm =(object)$reactFilm;   
+       return json_encode([$reactFilm]);
+    }
 }

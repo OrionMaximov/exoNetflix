@@ -52,6 +52,14 @@ class FilmRepository{
         $statement->execute();
         return $statement->fetchAll();
     }
+    public function selectSingle($id){
+        $pdo=new ConnectDB;
+        $rq = "SELECT * FROM movies_full WHERE id_movie = :search";
+        $statement = $pdo->connect()->prepare($rq,);
+        $statement->bindValue(':search', $id, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch();
+    }
     
 }
 
