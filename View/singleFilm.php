@@ -12,7 +12,15 @@ require_once($pref."Controller/RouteController.php");
 
 $routeController = new RouteController($_SERVER);
 require_once($routeController->getController('FilmController'));
-$films = FilmController::getSingleFilm($_GET['id_movie']);
+
+if(isset($_GET['id_movie'])&& !empty($_GET)){
+    $films = FilmController::getSingleFilm(strip_tags($_GET['id_movie']));
+}else{
+    header("Location:".$routeController->getRoute("index"));
+    die;
+}
+
+
 $url= $routeController->getRoute("singleFilm");
 
 ?>
