@@ -36,14 +36,14 @@ class FormVerif
         }
         return $errors;
     }
-    public function verifPwd($value, $fieldName, $errors)
+    public function verifPassword($value, $fieldName, $errors)
     {
         if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.* )(?=.*[^a-zA-Z0-9]).{8,16}$/", $value)) {
             $errors[$fieldName] = "Le mot de passe doit comporter au moins une majuscule, un caractère spécial et entre 8 à 12 caractères!";
         }
         return $errors;
     }
-    public function pwdHash($value){
+    public function passwordHash($value){
         return password_hash($value,PASSWORD_ARGON2ID);
     }
 }

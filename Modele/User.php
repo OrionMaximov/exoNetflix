@@ -1,13 +1,19 @@
 
 <?php
-require_once("../repository/UserRepository.php");
+if ($_SERVER['PHP_SELF']==='/php doc/POOphp/netflix_foad/index.php' ){
+    $pref = "./";
+  }else{
+    $pref = "../";
+  }
+require_once($pref."Controller/RouteController.php");
+require_once($routeController->getRepository('UserRepository'));
 class User extends UserRepository
 {
-    public function __construct($email,$login,$pwd, $pref,$role)
+    public function __construct($email,$login,$password, $pref,$role)
     {
         $this->setEmail($email);
         $this->setLogin($login);
-        $this->setPwd($pwd);
+        $this->setPassword($password);
         $this->setPref($pref);
         $this->setRole($role);
     }
@@ -15,7 +21,7 @@ class User extends UserRepository
     private $id_user;
     private $email;
     private $login;
-    private $pwd;
+    private $password;
     private $pref;
     private $role;
     // methodes (fonctions) de ma class
@@ -66,11 +72,11 @@ class User extends UserRepository
     public function setLogin($login){
         $this->login = $this->controlSetter($login,"login",'string',true);
     }
-    public function getPwd(){
-        return $this->pwd;
+    public function getPassword(){
+        return $this->password;
     }
-    public function setPwd($pwd){
-        $this->pwd = $this->controlSetter($pwd,"pwd",'string',true);
+    public function setpassword($password){
+        $this->password = $this->controlSetter($password,"password",'string',true);
     }
     public function getPref(){
         return unserialize($this->pref);

@@ -1,0 +1,12 @@
+/*autoCompletion*/
+.formAuto{
+    position: relative;
+}
+#autoComp{ 
+    position: absolute;
+    z-index: 2;
+    background-color: black;
+    top: 4rem;
+}
+
+/*fin autoCompletion*/

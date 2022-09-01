@@ -1,5 +1,13 @@
 <?php
-class Film
+if ($_SERVER['PHP_SELF']==='/php doc/POOphp/netflix_foad/index.php' ){
+    $pref = "./";
+}else{
+    $pref = "../";
+}
+require_once($pref."Controller/RouteController.php");
+require_once($routeController->getRepository('FilmRepository'));
+
+class Film 
 {
     public function __construct(
         $id_movie,

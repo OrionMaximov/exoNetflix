@@ -1,15 +1,22 @@
 <?php
-require_once("../inc/ConnectDB.php");
+if ($_SERVER['PHP_SELF']==='/php doc/POOphp/netflix_foad/index.php' ){
+    $pref = "./";
+  }else{
+    $pref = "../";
+  }
+require_once($pref."Controller/RouteController.php");
+
+require_once($routeController->getInc('ConnectDB'));
 class UserRepository
 {
 
     public function insertUser($data)
     {
         $pdo = new ConnectDB;
-        $sql = "INSERT INTO user (login, pwd, email, pref, role) VALUES (:login,:pwd,:email,:pref,:role)";
+        $sql = "INSERT INTO user (login, password, email, pref, role) VALUES (:login,:password,:email,:pref,:role)";
         $query = $pdo->connect()->prepare($sql);
         $query->bindValue(':login', $data->getLogin(), PDO::PARAM_STR);
-        $query->bindValue(':pwd', $data->getPwd(), PDO::PARAM_STR);
+        $query->bindValue(':password', $data->getPassword(), PDO::PARAM_STR);
         $query->bindValue(':email', $data->getEmail(), PDO::PARAM_STR);
         $query->bindValue(':pref', serialize($data->getPref()), PDO::PARAM_STR);
         $query->bindValue(':role', serialize($data->getRole()), PDO::PARAM_STR);

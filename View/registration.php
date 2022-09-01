@@ -1,6 +1,12 @@
 <?php
 session_start();
-require_once("../Controller/UserController.php");
+if ($_SERVER['PHP_SELF']==='/php doc/POOphp/netflix_foad/index.php' ){
+    $pref = "./";
+}else{
+    $pref = "../";
+}
+require_once("$pref.Controller/RouteController.php");
+require_once($routeController->getController('UserController'));
 $userController = new UserController();
 $register = $userController->register($_POST);
 
@@ -32,16 +38,16 @@ $register = $userController->register($_POST);
                 <?= isset($userController->errors['email']) ? "<span>".$userController->errors['email']."</span>" : "" ?>
             </div>
             <div>
-                <input type="password" name="pwd" value="<?= 
-                isset($userController->post['pwd']) ? $userController->post['pwd'] : "" 
+                <input type="password" name="password" value="<?= 
+                isset($userController->post['password']) ? $userController->post['password'] : "" 
                 ?>" placeholder="Mot de Passe">
-                <?= isset($userController->errors['pwd']) ? "<span>".$userController->errors['pwd']."</span>" : "" ?>
+                <?= isset($userController->errors['password']) ? "<span>".$userController->errors['password']."</span>" : "" ?>
             </div>
             <div>
-                <input type="text" name="confirmPwd" value="<?= 
-                isset($userController->post['confirmPwd']) ? $userController->post['confirmPwd'] : ""
+                <input type="text" name="confirmPassword" value="<?= 
+                isset($userController->post['confirmPassword']) ? $userController->post['confirmPassword'] : ""
                 ?>" placeholder="Confirmez votre mot">
-                <?= isset($userController->errors['confirmPwd']) ? "<span>".$userController->errors['confirmPwd']."</span>" : "" ?>
+                <?= isset($userController->errors['confirmPassword']) ? "<span>".$userController->errors['confirmPassword']."</span>" : "" ?>
             </div>
             <div>
                 <input type="submit" name="submited" value="Envoyer">

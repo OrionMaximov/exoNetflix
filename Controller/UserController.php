@@ -1,9 +1,16 @@
 <?php
-require_once("../Modele/User.php");
-require_once("../Controller/FormVerif.php");
-require_once("../repository/UserRepository.php");
-require_once("../Controller/SessionController.php");
-require_once("../Controller/RouteController.php");
+if ($_SERVER['PHP_SELF']==='/php doc/POOphp/netflix_foad/index.php' ){
+    $pref = "./";
+  }else{
+    $pref = "../";
+  }
+require_once($pref."Controller/RouteController.php");
+$routeController = new RouteController($_SERVER);
+require_once($routeController->getModele('User'));
+require_once($routeController->getRepository('UserRepository'));
+require_once($routeController->getController('SessionController'));
+require_once($routeController->getController('FormVerif'));
+
 class UserController extends FormVerif
 {
     public $errors = [];
@@ -16,21 +23,21 @@ class UserController extends FormVerif
         }
         return $errors;
     }
-    public function verifLogin($valueLogin,$valuePwd,$errors){
+    public function verifLogin($valueLogin,$valuepassword,$errors){
         $userRepository = new UserRepository;
-        $resultLogin = $userRepository->selectOneBy($valueLogin,'user','login','login,pwd');
-        $resultEmail = $userRepository->selectOneBy($valueLogin,'user','email','email,pwd');
+        $resultLogin = $userRepository->selectOneBy($valueLogin,'user','login','login,password');
+        $resultEmail = $userRepository->selectOneBy($valueLogin,'user','email','email,password');
         if(is_array($resultLogin) || is_array($resultEmail)){
             if(is_array($resultLogin)){
-                $pwd = $resultLogin['pwd'];
+                $password = $resultLogin['password'];
             }
             elseif (is_array($resultEmail)){
-                $pwd = $resultEmail['pwd'];
+                $password = $resultEmail['password'];
             }
-            if(password_verify($valuePwd,$pwd)){
+            if(password_verify($valuepassword,$password)){
                 echo "vous êtes maintenant connectés";
             } else {
-                $errors['pwd'] = "Le mot de passe esr incorrect!";
+                $errors['password'] = "Le mot de passe esr incorrect!";
             }
         } else {
             $errors['login'] = "Votre identifiant est incorrect!";
@@ -45,11 +52,11 @@ class UserController extends FormVerif
             $post = $this->stripTagsArray($post);
             $this->errors = $this->emptyField( $post['login'],'login',$this->errors);
             $this->errors = $this->emptyField( $post['email'],'email',$this->errors);
-            $this->errors = $this->emptyField( $post['pwd'],'pwd',$this->errors);
-            $this->errors = $this->emptyField( $post['confirmPwd'],'confirmPwd',$this->errors);
+            $this->errors = $this->emptyField( $post['password'],'password',$this->errors);
+            $this->errors = $this->emptyField( $post['confirmPassword'],'confirmPassword',$this->errors);
             $this->errors = $this->verifEmail( $post['email'],'email',$this->errors);
-            $this->errors = $this->identicField( $post['pwd'],$post['confirmPwd'],'pwd',$this->errors);
-            //$this->errors = $this->verifPwd( $post['pwd'],'pwd',$this->errors);
+            $this->errors = $this->identicField( $post['password'],$post['confirmPassword'],'password',$this->errors);
+            //$this->errors = $this->verifpassword( $post['password'],'password',$this->errors);
             $this->errors = $this->verifOneExist($post['email'],'email',$this->errors);
             $this->errors = $this->verifOneExist($post['login'],'login',$this->errors);
             if(count($this->errors) === 0){
@@ -57,8 +64,8 @@ class UserController extends FormVerif
                 // et l'insert dans ma base
                 $post['pref'] = ['void'];
                 $post['role'] = ['ROLE_USER'];
-                $post['pwd'] = $this->pwdHash($post['pwd']);
-                $user = new User($post['email'],$post['login'],$post['pwd'],$post['pref'],$post['role']);
+                $post['password'] = $this->passwordHash($post['password']);
+                $user = new User($post['email'],$post['login'],$post['password'],$post['pref'],$post['role']);
                 // insert
                 $user->insertUser($user);
                 $userRepository = new UserRepository;
@@ -74,8 +81,8 @@ class UserController extends FormVerif
         if (isset($post['submited']) && !empty($post['submited'])) {
             $post = $this->stripTagsArray($post);
             $this->errors = $this->emptyField( $post['login'],'login',$this->errors);
-            $this->errors = $this->emptyField( $post['pwd'],'pwd',$this->errors);
-            $this->errors = $this->verifLogin($post['login'],$post['pwd'],$this->errors);
+            $this->errors = $this->emptyField( $post['password'],'password',$this->errors);
+            $this->errors = $this->verifLogin($post['login'],$post['password'],$this->errors);
             
             if(count($this->errors) === 0){
                 $userRepository = new UserRepository;

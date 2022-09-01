@@ -1,0 +1,22 @@
+.cards{
+    border:3px solid fuchsia;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 27%;
+    margin: 1rem auto;
+}
+.cardsFrame{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.cards img{
+    width: 100%;
+}
+.category h2{
+   text-align: center; 
+   border: black 3px solid;
+}
+
