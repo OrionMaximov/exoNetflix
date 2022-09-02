@@ -12,10 +12,36 @@ require_once($pref."Controller/RouteController.php");
 
 $routeController = new RouteController($_SERVER);
 require_once($routeController->getController('FilmController'));
-$films = FilmController::getFilmRandom(10);
-$films=json_encode($films);
+require_once($routeController->getController('UserController'));
 $url= $routeController->getRoute("singleFilm");
+$xhrUrl=$routeController->getInc("addPref");
+$nbPage = FilmController::getNbPagesFilm();
+var_dump($nbPage);
 
+
+/* if(isset($_GET['id_movie'])&& !empty($_GET)){
+    $pref = UserController::insertInPref(strip_tags($_GET['id_movie']));
+}else{
+    header("Location:".$routeController->getRoute("index"));
+    die;
+} */
+$activePrev = false;
+$activeNext = false;
+$activePage = 1;
+$currentPage = 1;
+
+if (isset($_GET['currentPage']) && !empty($_GET['currentPage'])) {
+    $responsePageManager= FilmController::pageManager($_GET['currentPage'],$nbPage,$activePrev,$activeNext,$activePage );
+    $activePrev = $responsePageManager[0];
+    $activeNext =$responsePageManager[1] ;
+    $activePage = $responsePageManager[2];
+    $currentPage= $responsePageManager[3];
+} else{
+    $activePrev=true;
+}
+$genres = FilmController::showFilm($currentPage);
+
+$films = json_encode($genres);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -31,6 +57,8 @@ $url= $routeController->getRoute("singleFilm");
     const films = <?= $films ?>;
     const dBtn = true;
     const url = '<?= $url?>';
+    const xhrUrl = '<?= $xhrUrl?>';
+    const session_id =<?= $_SESSION['user']['id_user'] ?>;
     </script>
     <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
@@ -46,6 +74,7 @@ $url= $routeController->getRoute("singleFilm");
         <?php include $routeController->getInc('Menu'); ?>
     </header>
     <main>
+    <?php include $routeController->getInc('PaginationFilm'); ?>
         <div id="cardsFrame"></div>
     </main>
 

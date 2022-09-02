@@ -19,7 +19,7 @@ if(isset($_GET['id_movie'])&& !empty($_GET)){
     header("Location:".$routeController->getRoute("index"));
     die;
 }
-
+$xhrUrl=$routeController->getInc("addPref");
 
 $url= $routeController->getRoute("singleFilm");
 
@@ -38,6 +38,8 @@ $url= $routeController->getRoute("singleFilm");
         const films = <?= $films ?>;
         const dBtn = false;
         const url = '<?= $url?>';
+        const xhrUrl = '<?= $xhrUrl?>';
+        const session_id =<?= $_SESSION['user']['id_user'] ?>;
     </script>
     <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>

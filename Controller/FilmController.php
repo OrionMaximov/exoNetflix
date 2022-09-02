@@ -68,6 +68,37 @@ class FilmController
         
         return ceil($nbPage/20);
     }
+    public static function showFilm($currentPage){
+        $routeController = new RouteController($_SERVER);
+        $urlPosters= $routeController->getAssets()."img/posters/";
+        $ext=".jpg";
+        $filmRepository=new FilmRepository;
+        $nbFilm=20;
+        if(is_numeric($currentPage)){
+            $index=($currentPage-1)*$nbFilm;
+        }else{
+            $tmpCurrentPage=explode(",",$currentPage);
+            $currentPage=intval($tmpCurrentPage[1]);
+            $tmpCurrentPage[0]==="prev" ? $currentPage-- : $currentPage++ ;
+            $index=($currentPage-1)*$nbFilm;
+        }
+
+        $films=$filmRepository->genresFilms($index,$nbFilm);
+        foreach ($films as $key => $value) {
+            if (file_exists($urlPosters.$value['id_movie'].$ext)) {
+                $films[$key]['urlFilm']= $urlPosters.$value['id_movie'].$ext;
+            } else {
+                $films[$key]['urlFilm']= $urlPosters."default.jpg";
+            }
+        }  
+        return $films;
+    }
+    public static function getNbPagesFilm(){
+        $filmRepository=new FilmRepository;
+        $nbPage=$filmRepository->countForPageFilm();
+        var_dump($nbPage);
+        return ceil($nbPage/20);
+    }
     public static function pageManager($currentPage,$nbPage,$activePrev,$activeNext,$activePage){
         $currentPage =  strip_tags($currentPage);
     if (!strpos($currentPage, ",")) {
@@ -143,4 +174,6 @@ class FilmController
         $reactFilm =(object)$reactFilm;   
        return json_encode([$reactFilm]);
     }
+    
+    
 }

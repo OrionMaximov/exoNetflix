@@ -66,6 +66,8 @@ $currentPage = 20; // [11][12][13][14][15][16][17][18][19][20]
 $genres = FilmController::showGenre($currentPage, $_GET['genre']);
 $films = json_encode($genres);
 $url= $routeController->getRoute("singleFilm");
+$xhrUrl=$routeController->getInc("addPref");
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -81,6 +83,8 @@ $url= $routeController->getRoute("singleFilm");
         const films = <?= $films ?>;
         const dBtn = true;
         const url = '<?= $url?>';
+        const xhrUrl = '<?= $xhrUrl?>';
+        const session_id =<?= $_SESSION['user']['id_user'] ?>;
     </script>
     <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>

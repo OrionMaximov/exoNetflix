@@ -22,6 +22,7 @@ class UserRepository
         $query->bindValue(':role', serialize($data->getRole()), PDO::PARAM_STR);
         $query->execute();
     }
+   
     public function selectOneBy($value,$table,$field,$select)
     {
         $pdo = new ConnectDB;
@@ -31,4 +32,23 @@ class UserRepository
         $query->execute();
         return $query->fetch();
     }
+    public function selectPref($id_user){
+      $pdo = new ConnectDB;
+        $sql = "SELECT * FROM user(pref) WHERE id_user = :id_user";
+        $statement = $pdo->connect()->prepare($sql);
+        $statement->bindValue(':id_user', $id_user, PDO::PARAM_INT);
+        $statement->execute();
+        var_dump($statement);
+        return $statement->fetch();
+    }
+    public function userPref($id_user,$pref){
+      $pdo=new ConnectDB;
+      $rq = "INSERT INTO user (pref) Values :pref where id_user = :id_user";
+      $statement = $pdo->connect()->prepare($rq);
+      $statement->bindValue(':id_user', $id_user, PDO::PARAM_INT);
+      $statement->bindValue(':pref', $pref, PDO::PARAM_STR);
+      
+      $statement->execute();
+      
+  }
 }
